@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>(function(){try{var t=localStorage.getItem('nm-theme')||((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Next Millionaire | Values</title>
@@ -9,7 +10,7 @@
   <!-- Favicons and fonts (same) -->
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Hind+Siliguri:wght@400;500;600;700&family=Markazi+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* Entire CSS copied verbatim from the uploaded index.html to preserve design */
@@ -95,6 +96,7 @@
     }
     .nav-links {
       display: flex;
+      align-items: center;
       gap: 32px;
       font-size: 14px;
     }
@@ -760,8 +762,8 @@
     }
 
     /* Bangla / Arabic type */
-    body.lang-bn { font-family: 'Noto Sans Bengali', 'Inter', sans-serif; }
-    body.lang-ar { font-family: 'Noto Kufi Arabic', 'Inter', sans-serif; }
+    body.lang-bn { font-family: 'Hind Siliguri', 'Inter', sans-serif; }
+    body.lang-ar { font-family: 'Markazi Text', 'Inter', sans-serif; }
 
     /* RTL adjustments (Arabic) */
     html[dir="rtl"] .lang-switch {
@@ -784,6 +786,109 @@
     html[dir="rtl"] .contact-item,
     html[dir="rtl"] .glass-card { text-align: right; }
     html[dir="rtl"] .fleet-info { flex-direction: row-reverse; }
+  
+    /* ============ Theme Toggle Button ============ */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-left: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { border-color: #fff; color: #fff; }
+    .theme-toggle svg { width: 16px; height: 16px; display: block; pointer-events: none; }
+    .theme-toggle .icon-moon { display: none; }
+    html[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+    html[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+    .mobile-menu .theme-toggle { margin: 12px 24px 0; }
+    html[dir="rtl"] .theme-toggle { margin-left: 0; margin-right: 10px; }
+    html[dir="rtl"] .mobile-menu .theme-toggle { margin: 12px 24px 0; }
+
+    /* ============ Dark Theme Palette ============ */
+    html[data-theme="dark"] body { background: #0d0f13; color: #e7e7e7; }
+    html[data-theme="dark"] .mobile-menu { background: rgba(20, 22, 28, 0.55); }
+    html[data-theme="dark"] .content-section { background: #0d0f13; color: #e7e7e7; }
+    html[data-theme="dark"] .section-label { color: rgba(255, 255, 255, 0.55); }
+    html[data-theme="dark"] .section-title { color: #f5f5f5; }
+    html[data-theme="dark"] .muted { color: rgba(255, 255, 255, 0.62); }
+    html[data-theme="dark"] .stat-label { color: rgba(255, 255, 255, 0.55); }
+    html[data-theme="dark"] .stat-num { color: #f5f5f5; }
+    html[data-theme="dark"] .glass-card { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1); }
+    html[data-theme="dark"] .glass-card::before { display: none; }
+    html[data-theme="dark"] .member-card,
+    html[data-theme="dark"] .gallery-card,
+    html[data-theme="dark"] .value-card,
+    html[data-theme="dark"] .contact-item {
+      background: rgba(255, 255, 255, 0.035);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    html[data-theme="dark"] .member-card:hover,
+    html[data-theme="dark"] .gallery-card:hover,
+    html[data-theme="dark"] .value-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #54C2FE;
+    }
+    html[data-theme="dark"] #management .member-card,
+    html[data-theme="dark"] #management .member-card:hover { background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.1); }
+    html[data-theme="dark"] #management .member-card:hover { border-color: #54C2FE; }
+    html[data-theme="dark"] .member-name,
+    html[data-theme="dark"] #management .member-name,
+    html[data-theme="dark"] .gallery-title,
+    html[data-theme="dark"] .value-title { color: #f5f5f5; }
+    html[data-theme="dark"] .member-role,
+    html[data-theme="dark"] #management .member-role { color: rgba(255, 255, 255, 0.55); }
+    html[data-theme="dark"] #management .muted { color: rgba(255, 255, 255, 0.62); }
+    html[data-theme="dark"] .fleet-card,
+    html[data-theme="dark"] .driver-step { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1); }
+    html[data-theme="dark"] .fleet-status { color: rgba(255, 255, 255, 0.7); }
+    /* ---- ID-scoped overrides in the original CSS beat the generic dark
+       rules above (higher specificity), so they need their own dark
+       counterparts or text/cards stay dark-on-dark / light-on-light. ---- */
+    html[data-theme="dark"] #values .value-card { background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.1); }
+    html[data-theme="dark"] #values .value-card:hover { background: rgba(255, 255, 255, 0.06); border-color: #54C2FE; }
+    html[data-theme="dark"] #values .section-label { color: rgba(255, 255, 255, 0.55); }
+    html[data-theme="dark"] #values .section-title { color: #f5f5f5; }
+    html[data-theme="dark"] #values .muted { color: rgba(255, 255, 255, 0.62); }
+    html[data-theme="dark"] #values .gallery-title,
+    html[data-theme="dark"] #values .value-title { color: #f5f5f5; }
+    html[data-theme="dark"] .content-section:nth-of-type(5) .value-card { color: #f5f5f5; }
+    html[data-theme="dark"] .content-section:nth-of-type(5) .value-card .muted { color: rgba(255, 255, 255, 0.62); }
+
+    html[data-theme="dark"] #contact .section-label { color: rgba(255, 255, 255, 0.8); }
+    html[data-theme="dark"] #contact .section-title { color: #fff; }
+    html[data-theme="dark"] #contact .muted { color: rgba(255, 255, 255, 0.85); }
+    html[data-theme="dark"] #contact .contact-label { color: rgba(255, 255, 255, 0.75); }
+    html[data-theme="dark"] #contact .contact-value { color: #fff; }
+    html[data-theme="dark"] #contact .contact-item { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
+    html[data-theme="dark"] #contact .btn-primary { background: #fff; color: #1a1a1a; border-color: transparent; }
+    html[data-theme="dark"] #contact .btn-primary:hover { background: transparent; color: #fff; border-color: #fff; }
+
+
+    html[data-theme="dark"] .content-section:nth-of-type(1),
+    html[data-theme="dark"] .content-section:nth-of-type(3),
+    html[data-theme="dark"] .content-section:nth-of-type(6) { background: #1a4f6e; color: #fff; }
+    html[data-theme="dark"] .content-section:nth-of-type(2),
+    html[data-theme="dark"] .content-section:nth-of-type(4),
+    html[data-theme="dark"] .content-section:nth-of-type(5) { background: #0d0f13; color: #e7e7e7; }
+    html[data-theme="dark"] .content-section:nth-of-type(n+2):nth-of-type(even) .section-label,
+    html[data-theme="dark"] .content-section:nth-of-type(5) .section-label { color: rgba(255, 255, 255, 0.55); }
+    html[data-theme="dark"] .content-section:nth-of-type(n+2):nth-of-type(even) .section-title,
+    html[data-theme="dark"] .content-section:nth-of-type(5) .section-title { color: #f5f5f5; }
+    html[data-theme="dark"] .content-section:nth-of-type(n+2):nth-of-type(even) .muted,
+    html[data-theme="dark"] .content-section:nth-of-type(5) .muted { color: rgba(255, 255, 255, 0.62); }
+    html[data-theme="dark"] .content-section:nth-of-type(5) .value-card { color: #f5f5f5; }
+    html[data-theme="dark"] .content-section:nth-of-type(5) .value-card .muted { color: rgba(255, 255, 255, 0.62); }
+    html[data-theme="dark"] .content-section:nth-of-type(5) .value-title { color: #f5f5f5; }
+    html[data-theme="dark"] .content-section:nth-of-type(n+2):nth-of-type(even) .member-contact { color: #7fd3ff; }
+
   </style>
 </head>
 <body>
@@ -802,7 +907,7 @@
             <a href="team.html" data-i18n="nav.team">Team</a>
             <a href="values.html" data-i18n="nav.values">Values</a>
             <a href="contact.html" data-i18n="nav.contact">Contact</a>
-            <div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="bn">বাং</button><button data-lang-btn="ar">عربي</button></div>
+            <div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="bn">বাং</button><button data-lang-btn="ar">عربي</button></div><button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
           </div>
           <button class="hamburger" id="hamburgerBtn">
             <span></span><span></span><span></span>
@@ -814,7 +919,7 @@
           <a href="team.html" data-i18n="nav.team">Team</a>
           <a href="values.html" data-i18n="nav.values">Values</a>
           <a href="contact.html" data-i18n="nav.contact">Contact</a>
-          <div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="bn">বাং</button><button data-lang-btn="ar">عربي</button></div>
+          <div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="bn">বাং</button><button data-lang-btn="ar">عربي</button></div><button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
         </div>
       </div>
       <div class="hero-bottom">
@@ -923,6 +1028,7 @@
       }
     };
   </script>
+  <script src="js/theme-toggle.js"></script>
   <script src="js/i18n.js"></script>
 
   <script>
