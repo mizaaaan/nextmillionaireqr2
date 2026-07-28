@@ -133,6 +133,19 @@
       #backToTop { bottom: 20px; right: 20px; width: 38px; height: 38px; }
       #backToTop svg { width: 17px; height: 17px; }
     }
+
+    /* ── Scroll Reveal Animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
 </head>
 <body>
   <section class="hero">
@@ -186,7 +199,7 @@
     </div>
   </section>
 
-  <section class="content-section" id="about">
+  <section class="content-section reveal" id="about">
     <div class="container about-grid">
       <div class="about-media">
         <div class="about-media-decor"></div>
@@ -217,7 +230,7 @@
     </div>
   </section>
   
-  <section class="content-section" id="gallery">
+  <section class="content-section reveal" id="gallery">
     <div class="container">
       <div class="section-head-row">
         <div class="section-head">
@@ -238,7 +251,7 @@
     </div>
   </section>
 
-  <section class="content-section" id="management">
+  <section class="content-section reveal" id="management">
     <div class="container">
       <div class="section-head">
         <p class="section-label" data-i18n="mgmt.label">Leadership</p>
@@ -257,7 +270,7 @@
     </div>
   </section>
 
-  <section class="content-section" id="driver-rental">
+  <section class="content-section reveal" id="driver-rental">
     <div class="container">
       <div class="section-head">
         <p class="section-label" data-i18n="dr.label">Commercial Fleet · Driver Program</p>
@@ -296,7 +309,7 @@
   </section>
 
 
-  <section class="content-section" id="contact">
+  <section class="content-section reveal" id="contact">
     <div class="container">
       <div class="section-head-row">
         <div class="section-head">
@@ -714,6 +727,25 @@
       });
 
       window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+
+    // ── Scroll Reveal (IntersectionObserver) ──
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        els.forEach(function (el) { observer.observe(el); });
+      } else {
+        // Fallback: show everything immediately
+        els.forEach(function (el) { el.classList.add('visible'); });
+      }
     })();
   </script>
 </body>
