@@ -78,7 +78,61 @@
     html[data-theme="dark"] .content-section:nth-of-type(5) .value-card .muted { color: rgba(255, 255, 255, 0.62); }
     html[data-theme="dark"] .content-section:nth-of-type(5) .value-title { color: #f5f5f5; }
     html[data-theme="dark"] .content-section:nth-of-type(n+2):nth-of-type(even) .member-contact { color: #7fd3ff; }
-  </style>
+
+    /* ── Back to Top ── */
+    #backToTop {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #1a4f6e;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease, background 0.3s ease;
+    }
+    #backToTop.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #backToTop:hover {
+      background: #123a52;
+      transform: translateY(-3px);
+    }
+    #backToTop.visible:hover {
+      transform: translateY(-3px);
+    }
+    #backToTop svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    html[data-theme="dark"] #backToTop {
+      background: #54C2FE;
+      color: #1a1a1a;
+    }
+    html[data-theme="dark"] #backToTop:hover {
+      background: #7fd3ff;
+    }
+    @media (max-width: 768px) {
+      #backToTop { bottom: 20px; right: 20px; width: 38px; height: 38px; }
+      #backToTop svg { width: 17px; height: 17px; }
+    }
 </head>
 <body>
   <section class="hero">
@@ -634,5 +688,33 @@
   </script>
   <script src="js/theme-toggle.js"></script>
   <script src="js/i18n.js"></script>
+
+  <!-- Back to Top -->
+  <button id="backToTop" type="button" aria-label="Back to top" title="Back to top">
+    <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+  <script>
+    (function() {
+      var btn = document.getElementById('backToTop');
+      var threshold = 400;
+      var ticking = false;
+
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            btn.classList.toggle('visible', window.scrollY > threshold);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
 </body>
 </html>
