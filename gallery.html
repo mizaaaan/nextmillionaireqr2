@@ -23,7 +23,6 @@
   <meta name="twitter:description" content="Explore Next Millionaire's programs and impact — agricultural training, business skills, community outreach, and more.">
   <meta name="twitter:image" content="https://mizaaaan.github.io/nextmillionaireqr2/images/og-image.jpg">
 
-  <!-- Favicons and fonts (same as original) -->
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
@@ -35,6 +34,228 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Hind+Siliguri:wght@400;500;600;700&family=Markazi+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* ── Gallery Card with Image ── */
+    .gallery-card {
+      overflow: hidden;
+      padding: 0;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .gallery-card:hover {
+      border-color: #54C2FE;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(84, 194, 254, 0.18);
+    }
+    .gallery-card-img {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      background: #eef1f3;
+      position: relative;
+    }
+    .gallery-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .gallery-card:hover .gallery-card-img img {
+      transform: scale(1.05);
+    }
+    .gallery-card-body {
+      padding: 24px 28px 28px;
+    }
+
+    /* ── Lightbox Overlay ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+    .lightbox-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 90vw;
+      max-height: 88vh;
+      transform: scale(0.9);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .lightbox.active .lightbox-content {
+      transform: scale(1);
+    }
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      display: block;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .lightbox-caption {
+      margin-top: 16px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 600px;
+    }
+    .lightbox-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .lightbox-desc {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
+    }
+    .lightbox-counter {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Close Button ── */
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+      backdrop-filter: blur(4px);
+    }
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: rotate(90deg);
+    }
+
+    /* ── Navigation Arrows ── */
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-50%) scale(1.08);
+    }
+    .lightbox-nav:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    /* ── Loading Spinner ── */
+    .lightbox-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #54C2FE;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      z-index: 0;
+    }
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .gallery-card-img { aspect-ratio: 4 / 3; }
+      .gallery-card-body { padding: 18px 20px 22px; }
+      .gallery-card-body .icon { font-size: 28px; margin-bottom: 10px; }
+      .gallery-title { font-size: 14px; }
+      .gallery-card-body .muted { font-size: 13px; }
+
+      .lightbox-content { max-width: 96vw; max-height: 92vh; }
+      .lightbox-img { max-height: 60vh; border-radius: 8px; }
+      .lightbox-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+      }
+      .lightbox-prev { left: 8px; }
+      .lightbox-next { right: 8px; }
+      .lightbox-close {
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+      }
+      .lightbox-caption { padding: 0 12px; }
+      .lightbox-title { font-size: 16px; }
+      .lightbox-desc { font-size: 13px; }
+    }
+
+    /* ── Dark mode tweaks for gallery cards ── */
+    html[data-theme="dark"] .gallery-card {
+      background: rgba(255, 255, 255, 0.035);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    html[data-theme="dark"] .gallery-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #54C2FE;
+    }
+    html[data-theme="dark"] .gallery-card-img {
+      background: rgba(0, 0, 0, 0.25);
+    }
+  </style>
 </head>
 <body>
   <section class="hero">
@@ -71,7 +292,7 @@
         <div class="hero-grid">
           <div>
             <div class="eyebrow" data-i18n="hero.eyebrow">Our Work in Action</div>
-            <h1 data-i18n="hero.title">Programs & Impact Gallery</h1>
+            <h1 data-i18n="hero.title">Programs &amp; Impact Gallery</h1>
             <p class="subheading" data-i18n="hero.subtitle">See how our initiatives are transforming lives and communities across the region.</p>
             <div class="buttons" id="buttons">
               <a href="team.html" class="btn-primary" data-i18n="hero.btn1">Meet Our Team</a>
@@ -87,27 +308,206 @@
     <div class="container">
       <div class="section-head">
         <p class="section-label" data-i18n="hero.eyebrow">Our Work in Action</p>
-        <h2 class="section-title" data-i18n="hero.title">Programs & Impact Gallery</h2>
+        <h2 class="section-title" data-i18n="hero.title">Programs &amp; Impact Gallery</h2>
         <p class="muted" style="margin-top:14px;" data-i18n="hero.subtitle">See how our initiatives are transforming lives and communities across the region.</p>
       </div>
-      <div class="gallery-grid">
-        <div class="gallery-card"><div class="icon">🌾</div><div class="gallery-title" data-i18n="g1.t">Agricultural Training</div><p class="muted" data-i18n="g1.d">Member education on sustainable farming techniques and modern crop management practices.</p></div>
-        <div class="gallery-card"><div class="icon">💼</div><div class="gallery-title" data-i18n="g2.t">Business Skills</div><p class="muted" data-i18n="g2.d">Financial literacy, market access, and entrepreneurship workshops for cooperative members.</p></div>
-        <div class="gallery-card"><div class="icon">👨‍👩‍👧‍👦</div><div class="gallery-title" data-i18n="g3.t">Community Outreach</div><p class="muted" data-i18n="g3.d">Engaging with rural communities to build sustainable development and social networks.</p></div>
-        <div class="gallery-card"><div class="icon">📊</div><div class="gallery-title" data-i18n="g4.t">Financial Planning</div><p class="muted" data-i18n="g4.d">Member-focused financial services and microfinance initiatives for growth and stability.</p></div>
-        <div class="gallery-card"><div class="icon">🌿</div><div class="gallery-title" data-i18n="g5.t">Sustainability Initiatives</div><p class="muted" data-i18n="g5.d">Environmental conservation programs and organic farming promotion across member farms.</p></div>
-        <div class="gallery-card"><div class="icon">🏆</div><div class="gallery-title" data-i18n="g6.t">Member Success Stories</div><p class="muted" data-i18n="g6.d">Celebrating the achievements and milestones reached by our dedicated cooperative members.</p></div>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Cards are built by JavaScript to support i18n and lightbox data -->
       </div>
     </div>
   </section>
+
+  <!-- ── Lightbox Overlay ── -->
+  <div class="lightbox" id="galleryLightbox" role="dialog" aria-label="Image viewer">
+    <button class="lightbox-close" id="lbClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="Previous image">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="Next image">&#8250;</button>
+    <div class="lightbox-content">
+      <div class="lightbox-spinner" id="lbSpinner"></div>
+      <img class="lightbox-img" id="lbImg" src="" alt="">
+      <div class="lightbox-caption">
+        <div class="lightbox-title" id="lbTitle"></div>
+        <div class="lightbox-desc" id="lbDesc"></div>
+        <div class="lightbox-counter" id="lbCounter"></div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <div class="footer-inner">
       <strong>Next Millionaire</strong>
       <div data-i18n="footer.tagline">Building community wealth through shared ownership.</div>
-      <div>© <span id="year"></span> Next Millionaire </div>
+      <div>&copy; <span id="year"></span> Next Millionaire </div>
     </div>
   </footer>
+
+  <script>
+    // ── Gallery Data ──
+    var galleryItems = [
+      {
+        thumb: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop&q=80",
+        full: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1200&h=800&fit=crop&q=85",
+        key: "g1"
+      },
+      {
+        thumb: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop&q=80",
+        full: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=800&fit=crop&q=85",
+        key: "g2"
+      },
+      {
+        thumb: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=400&fit=crop&q=80",
+        full: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&h=800&fit=crop&q=85",
+        key: "g3"
+      },
+      {
+        thumb: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&h=400&fit=crop&q=80",
+        full: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=800&fit=crop&q=85",
+        key: "g4"
+      },
+      {
+        thumb: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=600&h=400&fit=crop&q=80",
+        full: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&h=800&fit=crop&q=85",
+        key: "g5"
+      },
+      {
+        thumb: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=400&fit=crop&q=80",
+        full: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=800&fit=crop&q=85",
+        key: "g6"
+      }
+    ];
+
+    // ── Render gallery cards (uses data-i18n for language switching) ──
+    function renderGallery() {
+      var grid = document.getElementById("galleryGrid");
+      if (!grid) return;
+      grid.innerHTML = galleryItems.map(function (item, idx) {
+        return '' +
+          '<div class="gallery-card" data-index="' + idx + '" data-src="' + item.full + '">' +
+            '<div class="gallery-card-img">' +
+              '<img src="' + item.thumb + '" alt="" loading="lazy">' +
+            '</div>' +
+            '<div class="gallery-card-body">' +
+              '<div class="gallery-title" data-i18n="' + item.key + '.t"></div>' +
+              '<p class="muted" data-i18n="' + item.key + '.d"></p>' +
+            '</div>' +
+          '</div>';
+      }).join("");
+    }
+
+    // ── Lightbox ──
+    var lb = document.getElementById("galleryLightbox");
+    var lbImg = document.getElementById("lbImg");
+    var lbTitle = document.getElementById("lbTitle");
+    var lbDesc = document.getElementById("lbDesc");
+    var lbCounter = document.getElementById("lbCounter");
+    var lbSpinner = document.getElementById("lbSpinner");
+    var lbClose = document.getElementById("lbClose");
+    var lbPrev = document.getElementById("lbPrev");
+    var lbNext = document.getElementById("lbNext");
+    var currentIndex = 0;
+    var gridItems = [];
+
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightbox();
+      lb.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      lb.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    function updateLightbox() {
+      var cards = document.querySelectorAll(".gallery-card");
+      if (!cards.length || currentIndex < 0 || currentIndex >= cards.length) return;
+
+      var card = cards[currentIndex];
+      var src = card.getAttribute("data-src");
+      // Read title/desc from rendered DOM (i18n updates them live)
+      var titleEl = card.querySelector(".gallery-title");
+      var descEl = card.querySelector(".muted");
+      var title = titleEl ? titleEl.textContent : "";
+      var desc = descEl ? descEl.textContent : "";
+
+      // Show spinner, hide image until loaded
+      lbSpinner.style.display = "block";
+      lbImg.style.opacity = "0";
+
+      lbImg.onload = function () {
+        lbSpinner.style.display = "none";
+        lbImg.style.opacity = "1";
+      };
+      lbImg.onerror = function () {
+        lbSpinner.style.display = "none";
+        lbImg.style.opacity = "1";
+      };
+      lbImg.src = src;
+
+      lbTitle.textContent = title;
+      lbDesc.textContent = desc;
+      lbCounter.textContent = (currentIndex + 1) + " / " + cards.length;
+    }
+
+    function prevImage() {
+      var cards = document.querySelectorAll(".gallery-card");
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+      updateLightbox();
+    }
+
+    function nextImage() {
+      var cards = document.querySelectorAll(".gallery-card");
+      currentIndex = (currentIndex + 1) % cards.length;
+      updateLightbox();
+    }
+
+    // ── Click handlers ──
+    document.addEventListener("click", function (e) {
+      // Open on gallery card click
+      var card = e.target.closest(".gallery-card");
+      if (card && card.getAttribute("data-index") !== null) {
+        openLightbox(parseInt(card.getAttribute("data-index"), 10));
+        return;
+      }
+      // Close on backdrop click
+      if (e.target === lb) {
+        closeLightbox();
+      }
+    });
+
+    lbClose.addEventListener("click", closeLightbox);
+    lbPrev.addEventListener("click", prevImage);
+    lbNext.addEventListener("click", nextImage);
+
+    // ── Keyboard support ──
+    document.addEventListener("keydown", function (e) {
+      if (!lb.classList.contains("active")) return;
+      if (e.key === "Escape") {
+        closeLightbox();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevImage();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextImage();
+      }
+    });
+
+    // ── Touch swipe support ──
+    (function () {
+      var startX = 0;
+      lb.addEventListener("touchstart", function (e) {
+        startX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      lb.addEventListener("touchend", function (e) {
+        var diff = e.changedTouches[0].screenX - startX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) prevImage(); else nextImage();
+        }
+      }, { passive: true });
+    })();
+  </script>
 
   <script>
     window.translations = {
@@ -163,12 +563,15 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-    const hb = document.getElementById('hamburgerBtn');
-    const mm = document.getElementById('mobileMenu');
-    hb && hb.addEventListener('click', () => {
+    var hb = document.getElementById('hamburgerBtn');
+    var mm = document.getElementById('mobileMenu');
+    hb && hb.addEventListener('click', function () {
       hb.classList.toggle('active');
       mm.classList.toggle('active');
     });
+
+    // ── Initial render ──
+    renderGallery();
   </script>
 </body>
 </html>
