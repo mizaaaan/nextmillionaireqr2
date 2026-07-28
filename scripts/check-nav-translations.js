@@ -12,7 +12,6 @@ const path = require("path");
 const PAGES = [
   "index.html",
   "about.html",
-  "gallery.html",
   "contact.html",
   "team.html",
   "fleet.html",
@@ -21,13 +20,12 @@ const PAGES = [
 
 // Keys that each page SHOULD have based on its HTML nav links
 const REQUIRED_NAV_KEYS = {
-  index:   ["nav.about", "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
-  about:   ["nav.about", "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
-  gallery: ["nav.about", "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
-  contact: ["nav.about", "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
-  team:    ["nav.about", "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
-  fleet:   ["nav.about", "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
-  portal:  ["nav.home",  "nav.about",   "nav.gallery", "nav.fleet", "nav.contact", "nav.portal"],
+  index:   ["nav.about", "nav.fleet", "nav.contact", "nav.portal"],
+  about:   ["nav.about", "nav.fleet", "nav.contact", "nav.portal"],
+  contact: ["nav.about", "nav.fleet", "nav.contact", "nav.portal"],
+  team:    ["nav.about", "nav.fleet", "nav.contact", "nav.portal"],
+  fleet:   ["nav.about", "nav.fleet", "nav.contact", "nav.portal"],
+  portal:  ["nav.home",  "nav.about", "nav.fleet", "nav.contact", "nav.portal"],
 };
 
 const LANGUAGES = ["en", "bn", "ar"];

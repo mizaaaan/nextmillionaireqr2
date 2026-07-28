@@ -10,7 +10,6 @@ const path = require("path");
 const PAGES = [
   "index.html",
   "about.html",
-  "gallery.html",
   "contact.html",
   "team.html",
   "fleet.html",
