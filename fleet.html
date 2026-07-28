@@ -124,22 +124,17 @@
   </footer>
 
   <script>
-    const fleetCars = [
-      { image: "images/fleet/car-01.jpg", num: 1, status: "booked" },
-      { image: "images/fleet/car-02.jpg", num: 2, status: "booked" },
-      { image: "images/fleet/car-03.jpg", num: 3, status: "booked" },
-      { image: "images/fleet/car-04.jpg", num: 4, status: "booked" },
-      { image: "images/fleet/car-05.jpg", num: 5, status: "booked" },
-      { image: "images/fleet/car-06.jpg", num: 6, status: "booked" },
-      { image: "images/fleet/car-07.jpg", num: 7, status: "booked" },
-      { image: "images/fleet/car-08.jpg", num: 8, status: "booked" },
-      { image: "images/fleet/car-09.jpg", num: 9, status: "booked" },
-      { image: "images/fleet/car-10.jpg", num: 10, status: "booked" },
-      { image: "images/fleet/car-11.jpg", num: 11, status: "booked" },
-      { image: "images/fleet/car-12.jpg", num: 12, status: "booked" },
-    ];
-
+    // ===================================================================
+    // DRIVER FLEET — Full fleet grid on fleet.html
+    //
+    // HOW TO UPDATE CAR STATUSES:
+    //   Edit data/fleet-status.json — change "booked" to "available" (or vice versa).
+    //   The homepage and fleet page both read from this single file.
+    //   No need to touch any HTML or JavaScript.
+    // ===================================================================
+    const FLEET_DATA_URL = "data/fleet-status.json";
     const driverFormUrl = "https://forms.gle/8A5kRBSRUosY3T5PA";
+    var _fleetCache = null;
 
     const fleetWords = {
       en: { car: "Car", booked: "Booked", apply: "Apply to Rent" },
@@ -147,24 +142,50 @@
       ar: { car: "سيارة", booked: "محجوزة", apply: "قدّم للإيجار" }
     };
 
+    function loadFleetData(callback) {
+      if (_fleetCache) {
+        callback(_fleetCache);
+        return;
+      }
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", FLEET_DATA_URL, true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            _fleetCache = data.cars || [];
+            callback(_fleetCache);
+          } catch (e) {
+            callback([]);
+          }
+        } else {
+          callback([]);
+        }
+      };
+      xhr.onerror = function () { callback([]); };
+      xhr.send();
+    }
+
     window.renderFleet = function (lang) {
-      const grid = document.getElementById("fleetGrid");
-      if (!grid) return;
-      const words = fleetWords[lang] || fleetWords.en;
-      grid.innerHTML = fleetCars.map(function (car) {
-        const label = words.car + " " + car.num;
-        const action = car.status === "booked"
-          ? '<span class="fleet-status booked">' + words.booked + '</span>'
-          : '<a href="' + driverFormUrl + '" target="_blank" rel="noopener" class="fleet-status available">' + words.apply + '</a>';
-        return '' +
-          '<div class="fleet-card">' +
-            '<div class="fleet-photo"><img src="' + car.image + '" alt="' + label + '" loading="lazy"></div>' +
-            '<div class="fleet-info">' +
-              '<span class="fleet-label">' + label + '</span>' +
-              action +
-            '</div>' +
-          '</div>';
-      }).join("");
+      loadFleetData(function (cars) {
+        var grid = document.getElementById("fleetGrid");
+        if (!grid) return;
+        var words = fleetWords[lang] || fleetWords.en;
+        grid.innerHTML = cars.map(function (car) {
+          var label = words.car + " " + car.num;
+          var action = car.status === "booked"
+            ? '<span class="fleet-status booked">' + words.booked + '</span>'
+            : '<a href="' + driverFormUrl + '" target="_blank" rel="noopener" class="fleet-status available">' + words.apply + '</a>';
+          return '' +
+            '<div class="fleet-card">' +
+              '<div class="fleet-photo"><img src="' + car.image + '" alt="' + label + '" loading="lazy"></div>' +
+              '<div class="fleet-info">' +
+                '<span class="fleet-label">' + label + '</span>' +
+                action +
+              '</div>' +
+            '</div>';
+        }).join("");
+      });
     };
     window.renderFleet("en");
   </script>

@@ -433,22 +433,16 @@
     // ===================================================================
     // DRIVER FLEET — Our Fleet grid (in the "Drive With Us" section)
     //
-    // HOW TO ADD A NEW CAR:
-    //   1. Add the car's photo to the images/fleet/ folder.
-    //   2. Add one line below with its filename and status.
-    //   3. status: "available" -> shows an "Apply to Rent" button (links to the driver form)
-    //      status: "booked"    -> shows a grey "Booked" badge (not clickable)
-    //   The grid updates automatically — no other changes needed.
+    // HOW TO UPDATE CAR STATUSES:
+    //   Edit data/fleet-status.json — change "booked" to "available" (or vice versa).
+    //   The homepage and fleet page both read from this single file.
+    //   No need to touch any HTML or JavaScript.
     // ===================================================================
     // Homepage shows only a preview of the fleet (first 3 cars).
     // The full 12-car list lives on fleet.html — see the "View Full Fleet" link below.
-    const fleetCars = [
-      { image: "images/fleet/car-01.jpg", num: 1, status: "booked" },
-      { image: "images/fleet/car-02.jpg", num: 2, status: "booked" },
-      { image: "images/fleet/car-03.jpg", num: 3, status: "booked" },
-    ];
-
+    const FLEET_DATA_URL = "data/fleet-status.json";
     const driverFormUrl = "https://forms.gle/8A5kRBSRUosY3T5PA";
+    var _fleetCache = null;
 
     const fleetWords = {
       en: {
@@ -471,38 +465,66 @@
       }
     };
 
+    function loadFleetData(callback) {
+      if (_fleetCache) {
+        callback(_fleetCache);
+        return;
+      }
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", FLEET_DATA_URL, true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            _fleetCache = data.cars || [];
+            callback(_fleetCache);
+          } catch (e) {
+            callback([]);
+          }
+        } else {
+          callback([]);
+        }
+      };
+      xhr.onerror = function () { callback([]); };
+      xhr.send();
+    }
+
     window.renderFleet = function (lang) {
-      const grid = document.getElementById("fleetGrid");
-      if (!grid) return;
-      const words = fleetWords[lang] || fleetWords.en;
-      grid.innerHTML = fleetCars.map(function (car) {
-        const label = words.car + " " + car.num;
-        const isBooked = car.status === "booked";
-        const pill = isBooked
-          ? '<span class="fleet-pill booked">' + words.booked + '</span>'
-          : '<span class="fleet-pill available"><span class="dot"></span>' + words.available + '</span>';
-        const desc = isBooked ? words.descBooked : words.descAvailable;
-        const footLabel = isBooked ? words.currentlyLeased : words.monthlyLease;
-        const action = isBooked
-          ? '<span class="fleet-card-v2-btn booked">' + words.booked + '</span>'
-          : '<a href="' + driverFormUrl + '" target="_blank" rel="noopener" class="fleet-card-v2-btn">' + words.apply + '</a>';
-        return '' +
-          '<div class="fleet-card-v2">' +
-            '<div class="fleet-card-v2-photo">' +
-              '<img src="' + car.image + '" alt="' + label + '" loading="lazy">' +
-              pill +
-            '</div>' +
-            '<div class="fleet-card-v2-body">' +
-              '<h4 class="fleet-card-v2-title">' + label + '</h4>' +
-              '<p class="fleet-card-v2-desc">' + desc + '</p>' +
-              '<div class="fleet-card-v2-divider"></div>' +
-              '<div class="fleet-card-v2-foot">' +
-                '<span class="fleet-card-v2-label">' + footLabel + '</span>' +
-                action +
+      loadFleetData(function (cars) {
+        var grid = document.getElementById("fleetGrid");
+        if (!grid) return;
+        var words = fleetWords[lang] || fleetWords.en;
+        // Homepage shows first 3 cars as a preview
+        var preview = cars.slice(0, 3);
+        grid.innerHTML = preview.map(function (car) {
+          var label = words.car + " " + car.num;
+          var isBooked = car.status === "booked";
+          var pill = isBooked
+            ? '<span class="fleet-pill booked">' + words.booked + '</span>'
+            : '<span class="fleet-pill available"><span class="dot"></span>' + words.available + '</span>';
+          var desc = isBooked ? words.descBooked : words.descAvailable;
+          var footLabel = isBooked ? words.currentlyLeased : words.monthlyLease;
+          var action = isBooked
+            ? '<span class="fleet-card-v2-btn booked">' + words.booked + '</span>'
+            : '<a href="' + driverFormUrl + '" target="_blank" rel="noopener" class="fleet-card-v2-btn">' + words.apply + '</a>';
+          return '' +
+            '<div class="fleet-card-v2">' +
+              '<div class="fleet-card-v2-photo">' +
+                '<img src="' + car.image + '" alt="' + label + '" loading="lazy">' +
+                pill +
               '</div>' +
-            '</div>' +
-          '</div>';
-      }).join("");
+              '<div class="fleet-card-v2-body">' +
+                '<h4 class="fleet-card-v2-title">' + label + '</h4>' +
+                '<p class="fleet-card-v2-desc">' + desc + '</p>' +
+                '<div class="fleet-card-v2-divider"></div>' +
+                '<div class="fleet-card-v2-foot">' +
+                  '<span class="fleet-card-v2-label">' + footLabel + '</span>' +
+                  action +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        }).join("");
+      });
     };
     window.renderFleet("en");
   </script>
