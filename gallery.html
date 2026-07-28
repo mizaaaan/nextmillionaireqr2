@@ -342,38 +342,14 @@
   </footer>
 
   <script>
-    // ── Gallery Data ──
+    // ── Gallery Data (local images in images/gallery/) ──
     var galleryItems = [
-      {
-        thumb: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop&q=80",
-        full: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1200&h=800&fit=crop&q=85",
-        key: "g1"
-      },
-      {
-        thumb: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop&q=80",
-        full: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=800&fit=crop&q=85",
-        key: "g2"
-      },
-      {
-        thumb: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=400&fit=crop&q=80",
-        full: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&h=800&fit=crop&q=85",
-        key: "g3"
-      },
-      {
-        thumb: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&h=400&fit=crop&q=80",
-        full: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=800&fit=crop&q=85",
-        key: "g4"
-      },
-      {
-        thumb: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=600&h=400&fit=crop&q=80",
-        full: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&h=800&fit=crop&q=85",
-        key: "g5"
-      },
-      {
-        thumb: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=400&fit=crop&q=80",
-        full: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=800&fit=crop&q=85",
-        key: "g6"
-      }
+      { src: "images/gallery/gallery-01.jpg", key: "g1" },
+      { src: "images/gallery/gallery-02.jpg", key: "g2" },
+      { src: "images/gallery/gallery-03.jpg", key: "g3" },
+      { src: "images/gallery/gallery-04.jpg", key: "g4" },
+      { src: "images/gallery/gallery-05.jpg", key: "g5" },
+      { src: "images/gallery/gallery-06.jpg", key: "g6" }
     ];
 
     // ── Render gallery cards (uses data-i18n for language switching) ──
@@ -381,10 +357,9 @@
       var grid = document.getElementById("galleryGrid");
       if (!grid) return;
       grid.innerHTML = galleryItems.map(function (item, idx) {
-        return '' +
-          '<div class="gallery-card" data-index="' + idx + '" data-src="' + item.full + '">' +
+        return '' +              '<div class="gallery-card" data-index="' + idx + '" data-src="' + item.src + '">' +
             '<div class="gallery-card-img">' +
-              '<img src="' + item.thumb + '" alt="" loading="lazy">' +
+              '<img src="' + item.src + '" alt="" loading="lazy">' +
             '</div>' +
             '<div class="gallery-card-body">' +
               '<div class="gallery-title" data-i18n="' + item.key + '.t"></div>' +
