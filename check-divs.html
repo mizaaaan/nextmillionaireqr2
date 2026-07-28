@@ -730,7 +730,9 @@ const emptyState = $('#emptyState');
 const toastContainer = $('#toastContainer');
 
 // ── State ──
-let resultsCache = [];  // ── Tab switching ──
+let resultsCache = [];
+
+// ── Tab switching ──
 tabBtns.forEach(btn => {
   function switchTab() {
     tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
