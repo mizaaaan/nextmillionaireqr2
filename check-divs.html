@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Next Millionaire — Tag Balance Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0e17;
+    color: #e8edf5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  ::selection { background: rgba(84, 194, 254, 0.3); color: #fff; }
+
+  /* ── Background ── */
+  .bg-glow {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .bg-glow::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: -20%;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(84, 194, 254, 0.08), transparent 70%);
+    animation: floatGlow 20s ease-in-out infinite;
+  }
+  .bg-glow::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    right: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);
+    animation: floatGlow 25s ease-in-out infinite reverse;
+  }
+  @keyframes floatGlow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(5%, 8%) scale(1.1); }
+    66% { transform: translate(-3%, 4%) scale(0.95); }
+  }
+
+  /* ── Container ── */
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    background: rgba(84, 194, 254, 0.1);
+    border: 1px solid rgba(84, 194, 254, 0.2);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .logo-badge:hover { border-color: rgba(84, 194, 254, 0.4); }
+  .logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #54C2FE;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #e8edf5 0%, #54C2FE 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── Tab Bar ── */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 28px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .tab-btn:hover { color: rgba(255, 255, 255, 0.7); }
+  .tab-btn.active {
+    background: rgba(84, 194, 254, 0.15);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(84, 194, 254, 0.1);
+  }
+  .tab-btn .icon { font-size: 16px; }
+
+  /* ── Tab Content ── */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── Upload Zone ── */
+  .upload-zone {
+    position: relative;
+    border: 2px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .upload-zone:hover,
+  .upload-zone.dragover {
+    border-color: rgba(84, 194, 254, 0.4);
+    background: rgba(84, 194, 254, 0.05);
+  }
+  .upload-zone.dragover {
+    border-color: #54C2FE;
+    background: rgba(84, 194, 254, 0.08);
+    transform: scale(1.01);
+  }
+  .upload-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+    opacity: 0.6;
+  }
+  .upload-zone h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .upload-zone p {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+  }
+  .upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .upload-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* ── Textarea ── */
+  .paste-area {
+    position: relative;
+  }
+  .paste-area textarea {
+    width: 100%;
+    min-height: 280px;
+    padding: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #e8edf5;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .paste-area textarea:focus {
+    border-color: rgba(84, 194, 254, 0.4);
+    box-shadow: 0 0 0 4px rgba(84, 194, 254, 0.06);
+  }
+  .paste-area textarea::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+  .paste-char-count {
+    text-align: right;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.25);
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── URL Input ── */
+  .url-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .url-input-group input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #e8edf5;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .url-input-group input:focus {
+    border-color: rgba(84, 194, 254, 0.4);
+    box-shadow: 0 0 0 4px rgba(84, 194, 254, 0.06);
+  }
+  .url-input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+  .url-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .url-preset {
+    padding: 7px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .url-preset:hover {
+    border-color: rgba(84, 194, 254, 0.3);
+    color: #fff;
+    background: rgba(84, 194, 254, 0.06);
+  }
+
+  /* ── Button ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border: none;
+    border-radius: 11px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: linear-gradient(135deg, #54C2FE, #3b82f6);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(84, 194, 254, 0.25);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 6px 24px rgba(84, 194, 254, 0.35);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  .btn-danger {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+  .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+  }
+  .btn-success {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    pointer-events: none;
+  }
+
+  /* ── Controls Bar ── */
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  /* ── Progress / Loading ── */
+  .progress-bar-wrap {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    height: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+    display: none;
+  }
+  .progress-bar-wrap.active { display: block; }
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #54C2FE, #3b82f6);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-top-color: #54C2FE;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Results ── */
+  .results-area { margin-top: 28px; }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+  }
+  .results-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .results-title .count {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* ── File Result Card ── */
+  .file-result {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+  .file-result:hover { border-color: rgba(255, 255, 255, 0.1); }
+  .file-result.pass { border-left: 3px solid #22c55e; }
+  .file-result.fail { border-left: 3px solid #ef4444; }
+
+  .file-result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    gap: 12px;
+  }
+  .file-result-header:hover { background: rgba(255, 255, 255, 0.02); }
+  .file-result-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    min-width: 0;
+  }
+  .file-result-name .file-icon { font-size: 18px; flex-shrink: 0; }
+  .file-result-name .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .file-result-name .size {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.25);
+    font-weight: 400;
+    flex-shrink: 0;
+  }
+  .file-result-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .status-badge.pass { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+  .status-badge.fail { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+  .status-badge.single { background: rgba(84, 194, 254, 0.1); color: #54C2FE; }
+  .arrow-toggle {
+    color: rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+    font-size: 12px;
+  }
+  .arrow-toggle.open { transform: rotate(180deg); }
+
+  /* ── File Result Body ── */
+  .file-result-body {
+    display: none;
+    padding: 0 20px 20px;
+  }
+  .file-result-body.open { display: block; }
+
+  /* ── Check Items ── */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-label {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  .check-detail {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .check-detail .num {
+    color: #e8edf5;
+    font-weight: 600;
+  }
+  .check-detail .num.open { color: #54C2FE; }
+  .check-detail .num.close { color: #f472b6; }
+  .check-detail .num.mismatch { color: #ef4444; font-weight: 700; }
+  .check-detail .num.match { color: #22c55e; font-weight: 700; }
+
+  /* ── Summary Cards Row ── */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .summary-stat {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .summary-stat .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .summary-stat .stat-num.pass { color: #22c55e; }
+  .summary-stat .stat-num.fail { color: #ef4444; }
+  .summary-stat .stat-num.warn { color: #f59e0b; }
+  .summary-stat .stat-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* ── Empty State ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .empty-state .empty-icon { font-size: 56px; margin-bottom: 16px; display: block; }
+  .empty-state h3 { font-size: 18px; font-weight: 600; color: rgba(255, 255, 255, 0.5); margin-bottom: 8px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* ── Toast Notification ── */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    pointer-events: none;
+  }
+  .toast {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: auto;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .toast.success { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; }
+  .toast.error { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+  .toast.info { background: rgba(84, 194, 254, 0.15); border: 1px solid rgba(84, 194, 254, 0.3); color: #54C2FE; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .container { padding: 24px 16px 60px; }
+    h1 { font-size: 26px; }
+    .tabs { flex-direction: column; gap: 4px; }
+    .tab-btn { padding: 10px 14px; font-size: 12px; }
+    .upload-zone { padding: 32px 16px; }
+    .upload-icon { font-size: 36px; }
+    .paste-area textarea { min-height: 200px; font-size: 12px; padding: 14px; }
+    .url-input-group { flex-direction: column; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+    .summary-row { grid-template-columns: repeat(2, 1fr); }
+    .file-result-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .file-result-status { width: 100%; justify-content: space-between; }
+    .results-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+
+  @media (max-width: 480px) {
+    .summary-row { grid-template-columns: 1fr 1fr; }
+    .url-presets { gap: 6px; }
+    .url-preset { font-size: 11px; padding: 5px 10px; }
+  }
+
+  /* ── Animation for new results ── */
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .file-result { animation: slideIn 0.3s ease; }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="logo-badge">
+      <span class="logo-dot"></span>
+      Next Millionaire
+    </div>
+    <h1>⚖️ Tag Balance Checker</h1>
+    <p class="subtitle">
+      Check HTML files for balanced <code>&lt;div&gt;</code>, <code>&lt;section&gt;</code>,
+      and <code>&lt;a&gt;</code> tags — upload, paste, or fetch.
+    </p>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="upload" role="tab" id="tab-btn-upload" aria-selected="true" aria-controls="tab-upload">
+      <span class="icon">📁</span> Upload Files
+    </button>
+    <button class="tab-btn" data-tab="paste" role="tab" id="tab-btn-paste" aria-selected="false" aria-controls="tab-paste">
+      <span class="icon">📋</span> Paste HTML
+    </button>
+    <button class="tab-btn" data-tab="fetch" role="tab" id="tab-btn-fetch" aria-selected="false" aria-controls="tab-fetch">
+      <span class="icon">🌐</span> Fetch URL
+    </button>
+  </div>
+
+  <!-- Tab: Upload -->
+  <div class="tab-content active" id="tab-upload" role="tabpanel" aria-labelledby="tab-btn-upload">
+    <div class="upload-zone" id="dropZone">
+      <span class="upload-icon">📄</span>
+      <h3>Drop HTML files here</h3>
+      <p>or click to browse — <code>*.html</code> files only</p>
+      <span class="upload-hint">🔍 Checks &lt;div&gt; &lt;section&gt; &lt;a&gt; balance</span>
+      <input type="file" id="fileInput" accept=".html, .htm" multiple>
+    </div>
+  </div>
+
+  <!-- Tab: Paste -->
+  <div class="tab-content" id="tab-paste" role="tabpanel" aria-labelledby="tab-btn-paste">
+    <div class="paste-area">
+      <textarea id="pasteInput" spellcheck="false" placeholder="&lt;!DOCTYPE html&gt;&#10;&lt;html&gt;&#10;&lt;head&gt;&#10;  &lt;title&gt;My Page&lt;/title&gt;&#10;&lt;/head&gt;&#10;&lt;body&gt;&#10;  &lt;div&gt;Hello World&lt;/div&gt;&#10;&lt;/body&gt;&#10;&lt;/html&gt;"></textarea>
+      <div class="paste-char-count"><span id="charCount">0</span> characters</div>
+    </div>
+    <div class="controls" style="margin-top:16px;">
+      <button class="btn btn-primary" id="checkPasteBtn">🔍 Check Balance</button>
+      <button class="btn btn-secondary" id="clearPasteBtn">Clear</button>
+    </div>
+  </div>
+
+  <!-- Tab: Fetch -->
+  <div class="tab-content" id="tab-fetch" role="tabpanel" aria-labelledby="tab-btn-fetch">
+    <div class="url-input-group">
+      <input type="url" id="urlInput" placeholder="https://example.com/page.html" autocomplete="url" spellcheck="false">
+      <button class="btn btn-primary" id="fetchBtn">🌐 Fetch</button>
+    </div>
+    <div class="url-presets">
+      <button class="url-preset" data-url="index.html">index.html</button>
+      <button class="url-preset" data-url="about.html">about.html</button>
+      <button class="url-preset" data-url="contact.html">contact.html</button>
+      <button class="url-preset" data-url="team.html">team.html</button>
+      <button class="url-preset" data-url="fleet.html">fleet.html</button>
+      <button class="url-preset" data-url="portal.html">portal.html</button>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap" id="progressWrap">
+    <div class="progress-bar-fill" id="progressFill"></div>
+  </div>
+
+  <!-- Results -->
+  <div id="resultsArea">
+    <div class="empty-state" id="emptyState">
+      <span class="empty-icon">🔍</span>
+      <h3>No results yet</h3>
+      <p>Upload HTML files, paste code, or fetch a URL to check tag balance.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================================
+   Tag Balance Checker — Client-side version of check-divs.js
+   ============================================================================ */
+
+// ── DOM refs ──
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+
+const tabBtns = $$('.tab-btn');
+const tabContents = {
+  upload: $('#tab-upload'),
+  paste: $('#tab-paste'),
+  fetch: $('#tab-fetch'),
+};
+const dropZone = $('#dropZone');
+const fileInput = $('#fileInput');
+const pasteInput = $('#pasteInput');
+const charCount = $('#charCount');
+const checkPasteBtn = $('#checkPasteBtn');
+const clearPasteBtn = $('#clearPasteBtn');
+const urlInput = $('#urlInput');
+const fetchBtn = $('#fetchBtn');
+const progressWrap = $('#progressWrap');
+const progressFill = $('#progressFill');
+const resultsArea = $('#resultsArea');
+const emptyState = $('#emptyState');
+const toastContainer = $('#toastContainer');
+
+// ── State ──
+let resultsCache = [];  // ── Tab switching ──
+tabBtns.forEach(btn => {
+  function switchTab() {
+    tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    Object.values(tabContents).forEach(tc => tc.classList.remove('active'));
+    const target = tabContents[btn.dataset.tab];
+    if (target) target.classList.add('active');
+  }
+  btn.addEventListener('click', switchTab);
+  btn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      switchTab();
+    }
+  });
+});
+
+// ── Char counter ──
+pasteInput.addEventListener('input', () => {
+  charCount.textContent = pasteInput.value.length;
+});
+
+clearPasteBtn.addEventListener('click', () => {
+  pasteInput.value = '';
+  charCount.textContent = '0';
+  pasteInput.focus();
+});
+
+// ── Toast system ──
+function showToast(message, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = message;
+  toastContainer.appendChild(el);
+  requestAnimationFrame(() => {
+    el.classList.add('show');
+  });
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 400);
+  }, 3000);
+}
+
+// ── Tag balance logic ──
+function checkTagBalance(html, label = 'page') {
+  const openDivs  = (html.match(/<div[\s>]/g) || []).length;
+  const closeDivs = (html.match(/<\/div>/g) || []).length;
+  const openSec   = (html.match(/<section[\s>]/g) || []).length;
+  const closeSec  = (html.match(/<\/section>/g) || []).length;
+  const openA     = (html.match(/<a[\s>]/g) || []).length;
+  const closeA    = (html.match(/<\/a>/g) || []).length;
+
+  const divOk   = openDivs === closeDivs;
+  const secOk   = openSec === closeSec;
+  const anchorOk = openA === closeA;
+  const allOk   = divOk && secOk && anchorOk;
+
+  return {
+    label,
+    allOk,
+    divs:  { open: openDivs, close: closeDivs, ok: divOk },
+    sections: { open: openSec, close: closeSec, ok: secOk },
+    anchors:  { open: openA, close: closeA, ok: anchorOk },
+    totalTags: openDivs + closeDivs + openSec + closeSec + openA + closeA,
+  };
+}
+
+// ── Render single result ──
+function renderResult(result) {
+  const card = document.createElement('div');
+  const passed = result.allOk;
+  card.className = `file-result ${passed ? 'pass' : 'fail'}`;
+
+  const checks = [
+    { icon: result.divs.ok ? '✅' : '❌', label: '<div> tags',
+      open: result.divs.open, close: result.divs.close, ok: result.divs.ok },
+    { icon: result.sections.ok ? '✅' : '❌', label: '<section> tags',
+      open: result.sections.open, close: result.sections.close, ok: result.sections.ok },
+    { icon: result.anchors.ok ? '✅' : '❌', label: '<a> tags',
+      open: result.anchors.open, close: result.anchors.close, ok: result.anchors.ok },
+  ];
+
+  const statusIcon = passed ? '✅' : '⚠️';
+  const statusText = passed ? 'Balanced' : 'Issues';
+
+  const errorContent = result.error ? `<div class="check-item"><span class="check-icon">⚠️</span><div><div class="check-label">Failed to fetch</div><div class="check-detail" style="color:#ef4444;font-weight:500;">${result.error}</div></div></div>` : '';
+
+  card.innerHTML = `
+    <div class="file-result-header" tabindex="0" role="button" aria-expanded="true">
+      <div class="file-result-name">
+        <span class="file-icon">📄</span>
+        <span class="truncate">${result.label}</span>
+        <span class="size">${result.error ? '—' : result.totalTags + ' tags'}</span>
+      </div>
+      <div class="file-result-status">
+        <span class="status-badge ${passed ? 'pass' : 'fail'}">${statusIcon} ${statusText}</span>
+        <span class="arrow-toggle">▼</span>
+      </div>
+    </div>
+    <div class="file-result-body open">
+      ${result.error ? errorContent : checks.map(c => `
+        <div class="check-item">
+          <span class="check-icon">${c.icon}</span>
+          <div>
+            <div class="check-label">${c.label}</div>
+            <div class="check-detail">
+              <span class="num open">${c.open}</span> opening ·
+              <span class="num close">${c.close}</span> closing
+              ${!c.ok ? `<span class="num mismatch"> ⚠️ mismatch</span>` : `<span class="num match"> ✓ balanced</span>`}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  const toggleFn = (header) => {
+    header.classList.toggle('expanded');
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+    const arrow = header.querySelector('.arrow-toggle');
+    if (arrow) arrow.classList.toggle('open');
+    header.setAttribute('aria-expanded', header.classList.contains('expanded') ? 'false' : 'true');
+  };
+
+  const headerEl = card.querySelector('.file-result-header');
+  headerEl.addEventListener('click', () => { toggleFn(headerEl); });
+  headerEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleFn(headerEl);
+    }
+  });
+
+  return card;
+}
+
+// ── Render all results ──
+function renderAllResults(results) {
+  resultsCache = results;
+
+  // Clear results area but keep empty state as fallback
+  const existing = resultsArea.querySelectorAll('.file-result, .summary-row, .results-header');
+  existing.forEach(el => el.remove());
+
+  emptyState.style.display = 'none';
+
+  if (results.length === 0) {
+    emptyState.style.display = 'block';
+    return;
+  }
+
+  // Summary stats
+  const total = results.length;
+  const passed = results.filter(r => r.allOk).length;
+  const failed = total - passed;
+
+  const summary = document.createElement('div');
+  summary.className = 'summary-row';
+  // Fix for the percentage calculation - ensure we never divide by zero
+  const passedPct = total > 0 ? Math.round((passed / total) * 100) : 100;
+  summary.innerHTML = `
+    <div class="summary-stat">
+      <div class="stat-num">${total}</div>
+      <div class="stat-label">Files Checked</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-num pass">${passed}</div>
+      <div class="stat-label">Balanced</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-num ${failed > 0 ? 'fail' : 'pass'}">${failed}</div>
+      <div class="stat-label">Issues Found</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-num ${passed === total ? 'pass' : 'warn'}">${passedPct}%</div>
+      <div class="stat-label">Pass Rate</div>
+    </div>
+  `;
+  resultsArea.insertBefore(summary, emptyState);
+
+  // Results header
+  const header = document.createElement('div');
+  header.className = 'results-header';
+  const allPassed = passed === total;
+  header.innerHTML = `
+    <div class="results-title">
+      ${allPassed ? '✅ All Clear' : '⚠️ Issues Detected'}
+      <span class="count">${passed}/${total} balanced</span>
+    </div>
+    <button class="btn ${allPassed ? 'btn-success' : 'btn-danger'}" id="collapseAllBtn" style="padding:6px 14px;font-size:12px;">
+      ${allPassed ? '✓ All Passed' : 'Collapse All'}
+    </button>
+  `;
+  resultsArea.insertBefore(header, emptyState);
+
+  const collapseBtn = header.querySelector('#collapseAllBtn');
+  if (!allPassed) {
+    collapseBtn.addEventListener('click', () => {
+      const bodies = resultsArea.querySelectorAll('.file-result-body');
+      const headers = resultsArea.querySelectorAll('.file-result-header');
+      const arrows = resultsArea.querySelectorAll('.arrow-toggle');
+      bodies.forEach(b => b.classList.remove('open'));
+      headers.forEach(h => h.classList.remove('expanded'));
+      arrows.forEach(a => a.classList.remove('open'));
+    });
+  }
+
+  // Individual results
+  results.forEach((result, idx) => {
+    const card = renderResult(result);
+    // Expand first result if it has issues
+    if (idx === 0 && !result.allOk) {
+      // Already open by default
+    } else if (idx > 0) {
+      const body = card.querySelector('.file-result-body');
+      const header = card.querySelector('.file-result-header');
+      const arrow = card.querySelector('.arrow-toggle');
+      body.classList.remove('open');
+      header.classList.remove('expanded');
+      if (arrow) arrow.classList.remove('open');
+    }
+    resultsArea.insertBefore(card, emptyState);
+  });
+
+  showToast(
+    allPassed ? '✅ All files have balanced tags!' : `⚠️ ${failed} file(s) have unbalanced tags`,
+    allPassed ? 'success' : 'error'
+  );
+}
+
+// ── Progress helpers ──
+function showProgress() {
+  progressWrap.classList.add('active');
+  progressFill.style.width = '0%';
+}
+function setProgress(pct) {
+  progressFill.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+}
+function hideProgress() {
+  progressWrap.classList.remove('active');
+}
+
+// ── Check HTML string ──
+function checkHtmlString(html, label) {
+  return checkTagBalance(html, label);
+}
+
+// ── Handle uploaded files ──
+async function handleFiles(files) {
+  if (files.length === 0) return;
+  showProgress();
+  const results = [];
+  let completed = 0;
+
+  for (const file of files) {
+    try {
+      const text = await file.text();
+      const result = checkHtmlString(text, file.name);
+      results.push(result);
+    } catch (e) {
+      results.push({
+        label: file.name,
+        allOk: false,
+        divs: { open: 0, close: 0, ok: false },
+        sections: { open: 0, close: 0, ok: false },
+        anchors: { open: 0, close: 0, ok: false },
+        totalTags: 0,
+        error: e.message,
+      });
+    }
+    completed++;
+    setProgress((completed / files.length) * 100);
+  }
+
+  // Small delay for visual progress
+  await new Promise(r => setTimeout(r, 200));
+  hideProgress();
+  renderAllResults(results);
+}
+
+// ── File upload handlers ──
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length > 0) {
+    handleFiles(fileInput.files);
+    fileInput.value = '';
+  }
+});
+
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+});
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length > 0) {
+    handleFiles(e.dataTransfer.files);
+  }
+});
+
+// ── Paste handler ──
+checkPasteBtn.addEventListener('click', () => {
+  const html = pasteInput.value.trim();
+  if (!html) {
+    showToast('Please paste some HTML code first', 'info');
+    pasteInput.focus();
+    return;
+  }
+  const result = checkHtmlString(html, 'Pasted HTML');
+  renderAllResults([result]);
+});
+
+// Allow Ctrl+Enter in textarea
+pasteInput.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    checkPasteBtn.click();
+  }
+});
+
+// ── Fetch handler ──
+async function fetchUrl(url) {
+  if (!url) {
+    showToast('Please enter a URL', 'info');
+    return;
+  }
+
+  // Prepend https:// if missing
+  let normalized = url.trim();
+  if (!normalized.startsWith('http://') && !normalized.startsWith('https://')) {
+    normalized = window.location.origin + '/' + normalized.replace(/^\//, '');
+  }
+
+  showProgress();
+
+  try {
+    const resp = await fetch(normalized);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status} ${resp.statusText}`);
+    const html = await resp.text();
+    setProgress(100);
+    await new Promise(r => setTimeout(r, 200));
+    hideProgress();
+
+    const label = url.trim().split('/').pop() || url.trim();
+    const result = checkHtmlString(html, label);
+    renderAllResults([result]);
+  } catch (e) {
+    hideProgress();
+    showToast(`Failed to fetch: ${e.message}`, 'error');
+    // Show error result
+    renderAllResults([{
+      label: url.trim().split('/').pop() || url.trim(),
+      allOk: false,
+      divs: { open: 0, close: 0, ok: false },
+      sections: { open: 0, close: 0, ok: false },
+      anchors: { open: 0, close: 0, ok: false },
+      totalTags: 0,
+      error: e.message,
+    }]);
+  }
+}
+
+fetchBtn.addEventListener('click', () => fetchUrl(urlInput.value));
+urlInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    fetchBtn.click();
+  }
+});
+
+// ── URL presets ──
+$$('.url-preset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    urlInput.value = btn.dataset.url;
+    fetchUrl(btn.dataset.url);
+  });
+});
+
+// ── Init ──
+console.log('⚖️ Tag Balance Checker loaded');
+console.log(`📋 Drop HTML files, paste code, or fetch a URL to check <div>, <section>, <a> balance.`);
+</script>
+</body>
+</html>
