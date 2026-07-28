@@ -45,10 +45,10 @@ function auditNavLinks(html, file) {
 function checkDivBalance(html, file) {
   const issues = [];
   // Count opening and closing div tags (excluding self-closing)
-  const openDivs = (html.match(/<div\s[^>]*>/g) || []).length;
+  const openDivs = (html.match(/<div[\s>]/g) || []).length;
   const closeDivs = (html.match(/<\/div>/g) || []).length;
   // Count other prominent tags
-  const openSections = (html.match(/<section\s[^>]*>/g) || []).length;
+  const openSections = (html.match(/<section[\s>]/g) || []).length;
   const closeSections = (html.match(/<\/section>/g) || []).length;
 
   if (openDivs !== closeDivs) {
