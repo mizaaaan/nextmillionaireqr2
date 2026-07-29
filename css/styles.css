@@ -762,7 +762,7 @@ footer {
   background: #54C2FE;
   border-top: none;
   padding: 48px 24px 0;
-  color: #ffffff;
+  color: #000000;
   text-align: left;
 }
 html[data-theme="dark"] footer {
@@ -790,12 +790,12 @@ html[data-theme="dark"] footer {
   font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 10px;
-  color: #ffffff;
+  color: #000000;
 }
 .footer-tagline {
   font-size: 13px;
   line-height: 1.7;
-  color: #ffffff;
+  color: #000000;
   max-width: 320px;
 }
 
@@ -805,7 +805,7 @@ html[data-theme="dark"] footer {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #000000;
   margin-bottom: 16px;
 }
 .footer-links {
@@ -814,7 +814,7 @@ html[data-theme="dark"] footer {
   gap: 10px;
 }
 .footer-links a {
-  color: #ffffff;
+  color: #000000;
   font-size: 14px;
   font-weight: 400;
   transition: all 0.2s ease;
@@ -851,19 +851,19 @@ html[data-theme="dark"] footer {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  color: #ffffff;
+  background: rgba(0,0,0,0.08);
+  color: #000000;
   font-size: 13px;
   font-weight: 700;
   transition: all 0.25s ease;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(0,0,0,0.12);
   text-decoration: none;
 }
 .footer-social-row a:hover {
-  background: rgba(255,255,255,0.95);
-  color: #1a4f6e;
+  background: rgba(0,0,0,0.85);
+  color: #ffffff;
   transform: translateY(-3px);
-  border-color: rgba(255,255,255,0.8);
+  border-color: rgba(0,0,0,0.9);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .footer-legal-list {
@@ -872,7 +872,7 @@ html[data-theme="dark"] footer {
   gap: 8px;
 }
 .footer-legal-list a {
-  color: #ffffff;
+  color: #000000;
   font-size: 13px;
   font-weight: 400;
   transition: opacity 0.2s ease;
@@ -882,7 +882,7 @@ html[data-theme="dark"] footer {
 
 /* Bottom bar */
 .footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.15);
+  border-top: 1px solid rgba(0,0,0,0.12);
   padding: 20px 0;
   display: flex;
   justify-content: space-between;
@@ -915,7 +915,7 @@ html[data-theme="dark"] .footer-bottom {
 
 .footer-meta {
   font-size: 11px;
-  color: #ffffff;
+  color: #000000;
   line-height: 1.6;
 }
 .footer-meta span {
