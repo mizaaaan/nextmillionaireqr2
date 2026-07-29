@@ -24,11 +24,22 @@ from reportlab.platypus import (
     PageBreak, HRFlowable
 )
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docs")
 BRAND_BLUE = HexColor("#54C2FE")
 BRAND_DARK = HexColor("#1a4f6e")
 LIGHT_GRAY = HexColor("#f5f5f5")
+
+# ── Register Bangla font (Noto Sans Bengali) ──
+BANGLA_FONT_PATH = os.path.expanduser("~/.fonts/NotoSansBengali.ttf")
+if os.path.exists(BANGLA_FONT_PATH):
+    pdfmetrics.registerFont(TTFont("NotoSansBengali", BANGLA_FONT_PATH))
+    HAS_BANGLA_FONT = True
+else:
+    print("  Warning: NotoSansBengali.ttf not found. Bangla text may not render correctly.")
+    HAS_BANGLA_FONT = False
 
 styles = getSampleStyleSheet()
 
@@ -574,6 +585,7 @@ def generate_tshirt_sizes():
                             leftMargin=18*mm, rightMargin=18*mm)
 
     # Extra paragraph styles for compact tables
+    bn = "NotoSansBengali" if HAS_BANGLA_FONT else "Helvetica"
     SmallNote = ParagraphStyle("sn", fontSize=8, leading=11, fontName="Helvetica-Oblique",
         textColor=HexColor("#888888"), alignment=TA_CENTER)
     GrandTotal = ParagraphStyle("gt", fontSize=12, leading=16, fontName="Helvetica-Bold",
@@ -586,7 +598,8 @@ def generate_tshirt_sizes():
     story.append(Paragraph("NEXT MILLIONAIRE", ParagraphStyle(
         "Brand", fontSize=11, leading=14, fontName="Helvetica-Bold",
         textColor=BRAND_BLUE, spaceAfter=4, alignment=TA_CENTER)))
-    story.append(Paragraph("\U0001f455 \u09a4\u09bf-\u09b6\u09be\u09b0\u09cd\u099f \u09b8\u09be\u0987\u099c \u0995\u09be\u09b2\u09c7\u0995\u09b6\u09a8 \u09ab\u09b0\u09cd\u09ae", styles["CoverTitle"]))
+    story.append(Paragraph("\U0001f455 \u09a4\u09bf-\u09b6\u09be\u09b0\u09cd\u099f \u09b8\u09be\u0987\u099c \u0995\u09be\u09b2\u09c7\u0995\u09b6\u09a8 \u09ab\u09b0\u09cd\u09ae", styles["CoverTitle"] if not HAS_BANGLA_FONT else ParagraphStyle("ctbn", fontSize=24, leading=30, fontName=bn,
+        textColor=BRAND_DARK, spaceAfter=8, alignment=TA_CENTER)))
     story.append(Paragraph("T-Shirt Size Collection Form", styles["CoverSub"]))
     story.append(Paragraph("Next Millionaire Co-operative Society Limited", styles["MyMeta"]))
     story.append(Paragraph("Registration No. CO-4471/2010", styles["MyMeta"]))
@@ -623,11 +636,13 @@ def generate_tshirt_sizes():
         ["23", "\u0993\u09ac\u09be\u09af\u09bc\u09a6\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8", "XXL (44\" / 30\")", "+966568135426"],
         ["24", "\u09ae\u09c1\u09b9\u09be\u09ae\u09cd\u09ae\u09a6 \u09af\u09c1\u09b8\u09c1\u09ab", "XXL (44\" / 30\")", "55147432"],
     ]
+    data_font = bn if HAS_BANGLA_FONT else "Helvetica"
     t = Table(qatar_data, colWidths=[20, 130, 90, 110])
     t.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
         ("TEXTCOLOR", (0, 0), (-1, 0), white),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTNAME", (0, 1), (-1, -1), data_font),
         ("FONTSIZE", (0, 0), (-1, -1), 7.5),
         ("GRID", (0, 0), (-1, -1), 0.4, HexColor("#cccccc")),
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
@@ -650,6 +665,7 @@ def generate_tshirt_sizes():
         ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
         ("TEXTCOLOR", (0, 0), (-1, 0), white),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTNAME", (0, 1), (-1, -1), data_font),
         ("FONTSIZE", (0, 0), (-1, -1), 7.5),
         ("GRID", (0, 0), (-1, -1), 0.4, HexColor("#cccccc")),
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
@@ -684,6 +700,7 @@ def generate_tshirt_sizes():
         ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
         ("TEXTCOLOR", (0, 0), (-1, 0), white),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTNAME", (0, 1), (-1, -1), data_font),
         ("FONTSIZE", (0, 0), (-1, -1), 7.5),
         ("GRID", (0, 0), (-1, -1), 0.4, HexColor("#cccccc")),
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
