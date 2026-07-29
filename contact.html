@@ -113,29 +113,48 @@
     </div>
   </section>
 
-  <footer>
+    <footer>
     <div class="footer-inner">
-      <div class="footer-brand">Next Millionaire</div>
-      <div class="footer-nav">
-        <a href="about.html" data-i18n="nav.about">About</a>
-        <a href="fleet.html" data-i18n="nav.fleet">Fleet</a>
-        <a href="contact.html" data-i18n="nav.contact">Contact</a>
-        <a href="portal.html" data-i18n="nav.portal">Portal</a>
+      <div class="footer-grid">
+        <!-- Brand column -->
+        <div class="footer-brand-col">
+          <div class="footer-brand-name">Next Millionaire</div>
+          <div class="footer-tagline" data-i18n="footer.tagline">Building community wealth through shared ownership.</div>
+        </div>
+        <!-- Nav column -->
+        <div>
+          <div class="footer-col-title" data-i18n="footer.quickLinks">Quick Links</div>
+          <div class="footer-links">
+            <a href="about.html"><span data-i18n="nav.about">About</span> <span class="arrow-link">→</span></a>
+            <a href="fleet.html"><span data-i18n="nav.fleet">Fleet</span> <span class="arrow-link">→</span></a>
+            <a href="contact.html"><span data-i18n="nav.contact">Contact</span> <span class="arrow-link">→</span></a>
+            <a href="portal.html"><span data-i18n="nav.portal">Portal</span> <span class="arrow-link">→</span></a>
+          </div>
+        </div>
+        <!-- Social + Legal column -->
+        <div class="footer-social-col">
+          <div class="footer-col-title" data-i18n="footer.connect">Connect</div>
+          <div class="footer-social-row">
+            <a href="#" aria-label="Facebook" title="Facebook">F</a>
+            <a href="#" aria-label="Twitter" title="Twitter">X</a>
+            <a href="#" aria-label="LinkedIn" title="LinkedIn">in</a>
+            <a href="#" aria-label="Instagram" title="Instagram">IG</a>
+          </div>
+          <div class="footer-legal-list">
+            <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
+            <a href="#" data-i18n="footer.terms">Terms of Service</a>
+          </div>
+        </div>
       </div>
-      <div class="footer-social">
-        <a href="#" aria-label="Facebook" title="Facebook">F</a>
-        <a href="#" aria-label="Twitter" title="Twitter">X</a>
-        <a href="#" aria-label="LinkedIn" title="LinkedIn">in</a>
-        <a href="#" aria-label="Instagram" title="Instagram">IG</a>
-      </div>
-      <div class="footer-divider"></div>
-      <div class="footer-legal">
-        <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
-        <a href="#" data-i18n="footer.terms">Terms of Service</a>
-      </div>
-      <div class="footer-meta">
-        <span>&copy; <span id="year"></span> Next Millionaire &middot; Registration No. CO-4471/2010</span>
-        <span data-i18n="footer.ica">Committed to ICA Co-operative Principles</span>
+      <div class="footer-bottom">
+        <div class="footer-meta">
+          <span>&copy; <span id="year"></span> Next Millionaire</span>
+          <span class="sep">&middot;</span>
+          <span>Registration No. CO-4471/2010</span>
+        </div>
+        <div class="footer-meta">
+          <span data-i18n="footer.ica">Committed to ICA Co-operative Principles</span>
+        </div>
       </div>
     </div>
   </footer>
@@ -143,7 +162,10 @@
   <script>
     window.translations = {
       en: {
-        "nav.about": "About", "nav.fleet": "Fleet", "nav.contact": "Contact", "nav.portal": "Portal",
+        "nav.about": "About",
+        "footer.quickLinks": "Quick Links",
+        "footer.connect": "Connect",
+        "footer.tagline": "Building community wealth through shared ownership.", "nav.fleet": "Fleet", "nav.contact": "Contact", "nav.portal": "Portal",
         "hero.eyebrow": "Get in Touch",
         "hero.title": "Contact Us",
         "hero.subtitle": "Questions, partnerships, or membership inquiries — we’d love to hear from you.",
@@ -172,7 +194,10 @@
         "c.office": "অফিস", "c.email": "ইমেইল", "c.phone": "ফোন",
         "contact.para": "লিখে যোগাযোগ করতে চান? উপরের ইমেইল ব্যবহার করুন অথবা কর্মঘণ্টার মধ্যে আমাদের অফিসে আসুন। আমরা ২ কার্যদিবসের মধ্যে উত্তর দেওয়ার চেষ্টা করি।",
         "contact.emailBtn": "ইমেইল করুন",
-        "footer.ica": "আইসিএ সমবায় নীতিমালার প্রতি প্রতিশ্রুতিবদ্ধ"
+        "footer.ica": "আইসিএ সমবায় নীতিমালার প্রতি প্রতিশ্রুতিবদ্ধ",
+        "footer.quickLinks": "দ্রুত লিঙ্ক",
+        "footer.connect": "সংযোগ",
+        "footer.tagline": "যৌগ মালিকানার মাধ্যমে সম্প্রদায়ের সম্পদ গড়ে তোলা",
       },
       ar: {
         "nav.about": "من نحن", "nav.fleet": "الأسطول", "nav.contact": "اتصل بنا", "nav.portal": "البوابة",
@@ -189,7 +214,10 @@
         "contact.emailBtn": "راسلنا عبر البريد",
         "footer.privacy": "سياسة الخصوصية",
         "footer.terms": "شروط الخدمة",
-        "footer.ica": "ملتزمون بمبادئ التحالف التعاوني الدولي (ICA)"
+        "footer.ica": "ملتزمون بمبادئ التحالف التعاوني الدولي (ICA)",
+        "footer.quickLinks": "روابط سريعة",
+        "footer.connect": "اتصل",
+        "footer.tagline": "بناء ثروة المجتمع من خلال الملكية المشتركة",
       }
     };
   </script>
