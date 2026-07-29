@@ -172,10 +172,7 @@
     var _fleetCache = null;
 
     const fleetWords = {
-      en: { car: "Car",
-        "footer.quickLinks": "Quick Links",
-        "footer.connect": "Connect",
-        "footer.tagline": "Building community wealth through shared ownership.", booked: "Booked", apply: "Apply to Rent" },,
+      en: { car: "Car", booked: "Booked", apply: "Apply to Rent" },
       bn: { car: "গাড়ি", booked: "বুক করা হয়েছে", apply: "ভাড়ার জন্য আবেদন করুন" },
       ar: { car: "سيارة", booked: "محجوزة", apply: "قدّم للإيجار" }
     };
@@ -183,10 +180,7 @@
     function loadFleetData(callback) {
       if (_fleetCache) {
         callback(_fleetCache);
-        return;,
-        "footer.quickLinks": "দ্রুত লিঙ্ক",
-        "footer.connect": "সংযোগ",
-        "footer.tagline": "যৌগ মালিকানার মাধ্যমে সম্প্রদায়ের সম্পদ গড়ে তোলা",
+        return;
       }
       var xhr = new XMLHttpRequest();
       xhr.open("GET", FLEET_DATA_URL, true);
@@ -249,12 +243,9 @@
         "fleet.cta": "Register as a Driver →",
         "fleet.fleetTitle": "Our Fleet",
         "fleet.fleetSubtitle": "Browse our vehicles below. An \"Apply to Rent\" button means the car is open — a \"Booked\" badge means it's already leased.",
-                "footer.privacy": "Privacy Policy",
+        "footer.privacy": "Privacy Policy",
         "footer.terms": "Terms of Service",
-        "footer.ica": "Committed to ICA Co-operative Principles",
-        "footer.quickLinks": "روابط سريعة",
-        "footer.connect": "اتصل",
-        "footer.tagline": "بناء ثروة المجتمع من خلال الملكية المشتركة",,
+        "footer.ica": "Committed to ICA Co-operative Principles"
       },
       bn: {
         "nav.about": "আমাদের সম্পর্কে", "nav.fleet": "ফ্লিট", "nav.contact": "যোগাযোগ", "nav.portal": "পোর্টাল",
@@ -272,10 +263,9 @@
         "fleet.cta": "চালক হিসেবে নিবন্ধন করুন →",
         "fleet.fleetTitle": "আমাদের গাড়ির বহর",
         "fleet.fleetSubtitle": "নিচে আমাদের গাড়িগুলো দেখুন। \"Apply to Rent\" বাটন মানে গাড়িটি খালি আছে — \"Booked\" ব্যাজ মানে এটি ইতিমধ্যে লিজ দেওয়া হয়েছে।",
-        ,
         "footer.quickLinks": "দ্রুত লিঙ্ক",
         "footer.connect": "সংযোগ",
-        "footer.tagline": "যৌগ মালিকানার মাধ্যমে সম্প্রদায়ের সম্পদ গড়ে তোলা",,
+        "footer.tagline": "যৌথ মালিকানার মাধ্যমে সম্প্রদায়ের সম্পদ গড়ে তোলা"
       },
       ar: {
         "nav.about": "من نحن", "nav.fleet": "الأسطول", "nav.contact": "اتصل بنا", "nav.portal": "البوابة",
@@ -293,10 +283,9 @@
         "fleet.cta": "سجّل كسائق ←",
         "fleet.fleetTitle": "أسطولنا",
         "fleet.fleetSubtitle": "تصفح سياراتنا أدناه. زر \"التقديم للإيجار\" يعني أن السيارة متاحة — وشارة \"محجوزة\" تعني أنها مؤجرة بالفعل.",
-        "footer.tagline": "نبني ثروة المجتمع من خلال الملكية المشتركة.",
+        "footer.tagline": "بناء ثروة المجتمع من خلال الملكية المشتركة.",
         "footer.quickLinks": "روابط سريعة",
-        "footer.connect": "اتصل",
-        "footer.tagline": "بناء ثروة المجتمع من خلال الملكية المشتركة",,
+        "footer.connect": "اتصل"
       }
     };
   </script>
