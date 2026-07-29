@@ -9,6 +9,7 @@ This will regenerate all 4 PDFs in the docs/ folder:
   - docs/meeting-minutes-q2-2026.pdf
   - docs/announcements.pdf
   - docs/member-guide.pdf
+  - docs/events-calendar.pdf
 
 Requires: reportlab (pip install reportlab)
 """
@@ -476,6 +477,94 @@ def generate_member_guide():
     print(f"  Created: {os.path.basename(path)}")
 
 
+# ── Events Calendar ──
+def generate_events_calendar():
+    path = os.path.join(OUT_DIR, "events-calendar.pdf")
+    doc = SimpleDocTemplate(path, pagesize=A4,
+                            topMargin=20*mm, bottomMargin=18*mm,
+                            leftMargin=22*mm, rightMargin=22*mm)
+    story = []
+
+    story.append(Spacer(1, 40))
+    story.append(Paragraph("NEXT MILLIONAIRE", ParagraphStyle(
+        "Brand", fontSize=12, leading=14, fontName="Helvetica-Bold",
+        textColor=BRAND_BLUE, spaceAfter=20, alignment=TA_CENTER)))
+    story.append(Paragraph("Events Calendar 2026", styles["CoverTitle"]))
+    story.append(Paragraph("Upcoming Meetings, Training & Key Dates", styles["CoverSub"]))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("Next Millionaire Co-operative Society Limited", styles["MyMeta"]))
+    story.append(Paragraph("Registration No. CO-4471/2010", styles["MyMeta"]))
+    story.append(Spacer(1, 30))
+    story.append(HRFlowable(width="40%", thickness=2, color=BRAND_BLUE, spaceBefore=0, spaceAfter=30))
+
+    months = [
+        ["Month", "Date", "Event", "Venue"],
+        ["August", "Aug 5-6", "Financial Literacy Training", "Training Room"],
+        ["August", "Aug 15", "Annual General Meeting", "Co-operative Hall"],
+        ["September", "Sep 12", "Board Meeting", "Board Room"],
+        ["October", "Oct 11", "Q3 General Meeting", "Co-operative Hall"],
+        ["November", "Nov 9", "Fleet Review Meeting", "Board Room"],
+        ["November", "Nov 20-21", "Member Workshop: Savings & Investment", "Training Room"],
+        ["December", "Dec 7", "Board Meeting (Budget Session)", "Board Room"],
+        ["December", "Dec 20", "Annual Member Appreciation Day", "Community Center"],
+        ["January 2027", "Jan 11", "Q4 General Meeting", "Co-operative Hall"],
+        ["February 2027", "Feb 15", "Annual Audit Review", "Board Room"],
+    ]
+    t = Table(months, colWidths=[100, 90, 230, 120])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("ALIGN", (0, 0), (1, -1), "CENTER"),
+        ("GRID", (0, 0), (-1, -1), 0.5, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+    story.append(t)
+
+    story.append(Spacer(1, 30))
+    story.append(add_divider())
+
+    story.append(Paragraph("Key Highlights", styles["MyH1"]))
+
+    highlights = [
+        ("\U0001f31f Annual General Meeting \u2014 August 15, 2026",
+         "The 15th AGM will feature approval of annual accounts, dividend declaration (proposed 12%), "
+         "and election of the board of directors. All 52 members are encouraged to attend. "
+         "Agenda documents will be shared 7 days prior via the member portal."),
+        ("\U0001f4da Financial Literacy Training \u2014 August 5-6",
+         "A two-day workshop covering savings planning, loan management, and understanding financial "
+         "statements. Lunch and materials provided. Limited to 30 participants \u2014 "
+         "register at the office by July 30."),
+        ("\U0001f3c6 Member Appreciation Day \u2014 December 20",
+         "Join us for our annual celebration recognizing member contributions. Awards, cultural programs, "
+         "and a community dinner will be held at the Community Center. All members and their families are welcome."),
+        ("\U0001f4cb Quarterly General Meetings",
+         "Regular QGMs are held on the second Sunday of January, April, July, and October. "
+         "Stay informed and participate in co-operative decision-making. Minutes from past meetings "
+         "are available on the member portal."),
+    ]
+
+    for title, body in highlights:
+        story.append(Paragraph(title, styles["MyH2"]))
+        story.append(Paragraph(body, styles["MyBody"]))
+        story.append(add_divider())
+
+    story.append(Spacer(1, 20))
+    story.append(Paragraph(
+        "<i>Note: Dates are subject to change. Members will be notified of any updates via the portal "
+        "and email. Please check the member portal regularly for the latest information.</i>",
+        ParagraphStyle("Note", fontSize=9, leading=13, fontName="Helvetica-Oblique",
+                       textColor=HexColor("#888888"), alignment=TA_CENTER, spaceAfter=20)))
+
+    doc.build(story, onFirstPage=header_footer, onLaterPages=header_footer)
+    print(f"  Created: {os.path.basename(path)}")
+
+
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
     print("Generating portal PDFs...")
@@ -483,4 +572,5 @@ if __name__ == "__main__":
     generate_meeting_minutes()
     generate_announcements()
     generate_member_guide()
+    generate_events_calendar()
     print("Done! All PDFs saved in docs/")
