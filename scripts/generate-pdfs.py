@@ -4,12 +4,13 @@
 Usage:
     python3 scripts/generate-pdfs.py
 
-This will regenerate all 4 PDFs in the docs/ folder:
+This will regenerate all 6 PDFs in the docs/ folder:
   - docs/financial-report-2025.pdf
   - docs/meeting-minutes-q2-2026.pdf
   - docs/announcements.pdf
   - docs/member-guide.pdf
   - docs/events-calendar.pdf
+  - docs/tshirt-sizes.pdf
 
 Requires: reportlab (pip install reportlab)
 """
@@ -565,6 +566,143 @@ def generate_events_calendar():
     print(f"  Created: {os.path.basename(path)}")
 
 
+# ── T-Shirt Sizes ──
+def generate_tshirt_sizes():
+    path = os.path.join(OUT_DIR, "tshirt-sizes.pdf")
+    doc = SimpleDocTemplate(path, pagesize=A4,
+                            topMargin=18*mm, bottomMargin=16*mm,
+                            leftMargin=18*mm, rightMargin=18*mm)
+
+    # Extra paragraph styles for compact tables
+    SmallNote = ParagraphStyle("sn", fontSize=8, leading=11, fontName="Helvetica-Oblique",
+        textColor=HexColor("#888888"), alignment=TA_CENTER)
+    GrandTotal = ParagraphStyle("gt", fontSize=12, leading=16, fontName="Helvetica-Bold",
+        textColor=BRAND_DARK, alignment=TA_CENTER, spaceAfter=10)
+    TH1 = ParagraphStyle("th1", fontSize=16, leading=20, fontName="Helvetica-Bold",
+        textColor=BRAND_DARK, spaceAfter=10, spaceBefore=14)
+
+    story = []
+    story.append(Spacer(1, 30))
+    story.append(Paragraph("NEXT MILLIONAIRE", ParagraphStyle(
+        "Brand", fontSize=11, leading=14, fontName="Helvetica-Bold",
+        textColor=BRAND_BLUE, spaceAfter=4, alignment=TA_CENTER)))
+    story.append(Paragraph("\U0001f455 \u09a4\u09bf-\u09b6\u09be\u09b0\u09cd\u099f \u09b8\u09be\u0987\u099c \u0995\u09be\u09b2\u09c7\u0995\u09b6\u09a8 \u09ab\u09b0\u09cd\u09ae", styles["CoverTitle"]))
+    story.append(Paragraph("T-Shirt Size Collection Form", styles["CoverSub"]))
+    story.append(Paragraph("Next Millionaire Co-operative Society Limited", styles["MyMeta"]))
+    story.append(Paragraph("Registration No. CO-4471/2010", styles["MyMeta"]))
+    story.append(Spacer(1, 14))
+
+    # ── Qatar ──
+    story.append(Paragraph("\U0001f1f6\U0001f1e6 Qatar (Total: 24)", TH1))
+    story.append(Paragraph("Sizes: S=3, M=5, L=7, XL=5, XXL=4", SmallNote))
+    story.append(Spacer(1, 4))
+    qatar_data = [
+        ["#", "Name", "Size", "Phone"],
+        ["1", "Md mezanur Rahman", "M", "+8801795617389"],
+        ["2", "\u09ae\u09cb: \u09ae\u09be\u09ae\u09c1\u09a8", "XL (42\" / 29\")", "1912142028"],
+        ["3", "Abdur Rakib", "XXL (44\" / 30\")", "74032403"],
+        ["4", "\u09a8\u09c7\u099b\u09be\u09b0 \u0989\u09a6\u09cd\u09a6\u09bf\u09a8 \u0986\u09b9\u09ae\u09c7\u09a6", "L (40\" / 28\")", "50428240"],
+        ["5", "RUHUL AMIN", "L (40\" / 28\")", "+97466745799"],
+        ["6", "Abul Bashar", "XL (42\" / 29\")", "+97433836996"],
+        ["7", "\u09b8\u09c1\u09ae\u09be\u0987\u09af\u09bc\u09be \u099a\u09cc\u09a7\u09c1\u09b0\u09c0", "L (40\" / 28\")", "55794220"],
+        ["8", "\u09ab\u09c1\u09af\u09bc\u09be\u09a6 \u09ac\u09bf\u09a8 \u0986\u09ac\u09cd\u09a6\u09c1\u09b2 \u0986\u09b2\u09c0\u09ae", "S (36\" / 26\")", "55794220"],
+        ["9", "\u09b9\u09be\u09ae\u09be\u09a6 \u09ac\u09bf\u09a8 \u0986\u09ac\u09cd\u09a6\u09c1\u09b2 \u0986\u09b2\u09c0\u09ae", "S (36\" / 26\")", "55794220"],
+        ["10", "\u09a4\u09be\u09b8\u09a8\u09bf\u09ae \u09ac\u09bf\u09a8\u09a4\u09c7 \u0986\u09ac\u09cd\u09a6\u09c1\u09b2 \u0986\u09b2\u09c0\u09ae", "S (36\" / 26\")", "55794220"],
+        ["11", "\u09ae\u09cb: \u0986\u09ac\u09cd\u09a6\u09c1\u09b2 \u0986\u09b2\u09c0\u09ae", "L (40\" / 28\")", "55794220"],
+        ["12", "FAkHRU DDIN", "XXL (44\" / 30\")", "+97466102494"],
+        ["13", "Md imam uddin babu", "XL (42\" / 29\")", "+97455852649"],
+        ["14", "\u098f\u09ae \u098f \u09ae\u09be\u09b9\u09ae\u09c1\u09a6 (APEL MAHMUD)", "L (40\" / 28\")", "+97466988646"],
+        ["15", "MD. Abdul Wadud", "L (40\" / 28\")", "51083191"],
+        ["16", "Nazmul Hossain Sujan", "M (38\" / 27\")", "70047375"],
+        ["17", "Sahajan Mridha", "M (38\" / 27\")", "33686696"],
+        ["18", "Abdullah Jahangir", "XL (42\" / 29\")", "+97450904458"],
+        ["19", "Taj Mohammed", "L (40\" / 28\")", "+97433667909"],
+        ["20", "Mohiuddin babul", "M (38\" / 27\")", "+97431034683"],
+        ["21", "\u0986\u09ac\u09cd\u09a6\u09c1\u09b8 \u09b8\u09be\u09b2\u09be\u09ae", "XL (42\" / 29\")", "+97455110506"],
+        ["22", "\u09b9\u09c1\u099c\u09be\u0987\u09ab\u09be", "M (38\" / 27\")", "55110506"],
+        ["23", "\u0993\u09ac\u09be\u09af\u09bc\u09a6\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8", "XXL (44\" / 30\")", "+966568135426"],
+        ["24", "\u09ae\u09c1\u09b9\u09be\u09ae\u09cd\u09ae\u09a6 \u09af\u09c1\u09b8\u09c1\u09ab", "XXL (44\" / 30\")", "55147432"],
+    ]
+    t = Table(qatar_data, colWidths=[20, 130, 90, 110])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 7.5),
+        ("GRID", (0, 0), (-1, -1), 0.4, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+    story.append(t)
+    story.append(Spacer(1, 16))
+
+    # ── Saudi ──
+    story.append(Paragraph("\U0001f1f8\U0001f1e6 Saudi Arabia (Total: 1)", TH1))
+    story.append(Spacer(1, 4))
+    saudi_data = [
+        ["#", "Name", "Size", "Phone"],
+        ["1", "Md. Saddam hossain", "M (38\" / 27\")", "+9660599086200"],
+    ]
+    t = Table(saudi_data, colWidths=[20, 130, 90, 110])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 7.5),
+        ("GRID", (0, 0), (-1, -1), 0.4, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+    story.append(t)
+    story.append(Spacer(1, 16))
+
+    # ── Bangladesh ──
+    story.append(Paragraph("\U0001f1e7\U0001f1e9 Bangladesh (Total: 12)", TH1))
+    story.append(Paragraph("Sizes: S=1, L=5, XL=4, XXL=1, XXXL=1", SmallNote))
+    story.append(Spacer(1, 4))
+    bd_data = [
+        ["#", "Name", "Size", "Phone"],
+        ["1", "Md Mizanur Rahman", "XL (42\" / 29\")", "01725752500"],
+        ["2", "\u09ab\u09be\u09b0\u09be\u09ac\u09c0 \u09b0\u09b9\u09ae\u09be\u09a8 \u0987\u09b6\u09be\u09a8", "L (40\" / 28\")", "01912-142028"],
+        ["3", "\u09b9\u09be\u09ab\u09bf\u099c\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8 \u099c\u09be\u09b9\u09be\u0999\u09cd\u0997\u09c0\u09b0", "L (40\" / 28\")", "01911393568"],
+        ["4", "Lokman hossain", "L (40\" / 28\")", "01813663709"],
+        ["5", "Kazi Moinul Haque", "XXXL (46\" / 31\")", "+8801914132631"],
+        ["6", "MD. Monirul Islam Babu", "XL (42\" / 29\")", "01711979462"],
+        ["7", "Kazi Ashraful Haque", "XXL (44\" / 30\")", "01301247406"],
+        ["8", "Md. Abdur Rahim", "XL (42\" / 29\")", "01917130670"],
+        ["9", "Kabir Hasan", "XL (42\" / 29\")", "01988980087"],
+        ["10", "Lovly Islam", "S (36\" / 26\")", "+8801935166488"],
+        ["11", "\u09b0\u09ab\u09bf\u0995\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8 \u09ae\u09be\u09b0\u09c1\u09ab", "L (40\" / 28\")", "01676300530"],
+        ["12", "Gm Nojir Ahmed", "L (40\" / 28\")", "01740644091"],
+    ]
+    t = Table(bd_data, colWidths=[20, 130, 90, 110])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 7.5),
+        ("GRID", (0, 0), (-1, -1), 0.4, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+    story.append(t)
+
+    story.append(Spacer(1, 20))
+    story.append(HRFlowable(width="60%", thickness=1, color=BRAND_BLUE, spaceBefore=0, spaceAfter=12))
+    story.append(Paragraph("<b>Grand Total: 37 Members</b>", GrandTotal))
+    story.append(Paragraph("Measurements: Chest (\u09ac\u09c1\u0995) x Length (\u09a6\u09c8\u09b0\u09cd\u0998\u09cd\u09af) in inches", SmallNote))
+    story.append(Paragraph("S=36x26 | M=38x27 | L=40x28 | XL=42x29 | XXL=44x30 | XXXL=46x31", SmallNote))
+
+    doc.build(story, onFirstPage=header_footer, onLaterPages=header_footer)
+    print(f"  Created: {os.path.basename(path)}")
+
+
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
     print("Generating portal PDFs...")
@@ -573,4 +711,5 @@ if __name__ == "__main__":
     generate_announcements()
     generate_member_guide()
     generate_events_calendar()
+    generate_tshirt_sizes()
     print("Done! All PDFs saved in docs/")
