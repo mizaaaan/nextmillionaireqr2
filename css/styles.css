@@ -759,25 +759,95 @@ h1 {
 
 /* ── Footer ── */
 footer {
-  background: #54C2FE;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 32px 24px;
+  background: #1a4f6e;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 40px 24px 32px;
   color: #fff;
   text-align: center;
 }
 html[data-theme="dark"] footer {
-  background: #1a4f6e;
-  border-top-color: rgba(255, 255, 255, 0.15);
+  background: #0d0f13;
+  border-top-color: rgba(255, 255, 255, 0.06);
 }
 .footer-inner {
   max-width: 1200px;
   margin: 0 auto;
+}
+.footer-brand {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 18px;
+}
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.footer-nav a {
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.footer-nav a:hover { color: #fff; }
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+.footer-social a:hover {
+  background: #54C2FE;
+  color: #fff;
+  transform: translateY(-2px);
+}
+.footer-divider {
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.15);
+  margin: 0 auto 16px;
+  border-radius: 2px;
+}
+.footer-legal {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.footer-legal a {
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+.footer-legal a:hover { color: #fff; }
+.footer-meta {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 12px;
+  gap: 4px;
+  align-items: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
 }
-.footer-inner strong { font-size: 14px; }
 
 /* ── Driver Car Rental ── */
 #driver-rental,
