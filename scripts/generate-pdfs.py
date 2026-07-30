@@ -720,6 +720,141 @@ def generate_tshirt_sizes():
     print(f"  Created: {os.path.basename(path)}")
 
 
+# ── Share Balance Statement ──
+def generate_share_balance():
+    path = os.path.join(OUT_DIR, "share-statement.pdf")
+    doc = SimpleDocTemplate(path, pagesize=A4,
+                            topMargin=20*mm, bottomMargin=18*mm,
+                            leftMargin=22*mm, rightMargin=22*mm)
+    story = []
+
+    story.append(Spacer(1, 40))
+    story.append(Paragraph("NEXT MILLIONAIRE", ParagraphStyle(
+        "Brand", fontSize=12, leading=14, fontName="Helvetica-Bold",
+        textColor=BRAND_BLUE, spaceAfter=20, alignment=TA_CENTER)))
+    story.append(Paragraph("Member Share Balance Statement", styles["CoverTitle"]))
+    story.append(Paragraph("Next Millionaire Co-operative Society Limited", styles["CoverSub"]))
+    story.append(Paragraph("Registration No. CO-4471/2010", styles["MyMeta"]))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("Statement Date: July 30, 2026", styles["CoverSub"]))
+    story.append(Spacer(1, 30))
+    story.append(HRFlowable(width="40%", thickness=2, color=BRAND_BLUE, spaceBefore=0, spaceAfter=30))
+    story.append(PageBreak())
+
+    story.append(Paragraph("Member Details", styles["MyH1"]))
+    member_data = [
+        ["Field", "Details"],
+        ["Member Name", "Md. Mizanur Rahman"],
+        ["Member ID", "NM-2024-0047"],
+        ["Date of Joining", "January 15, 2024"],
+        ["Member Status", "Active (in good standing)"],
+        ["Share Class", "Ordinary Class A"],
+    ]
+    t = Table(member_data, colWidths=[180, 280])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("GRID", (0, 0), (-1, -1), 0.5, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+    ]))
+    story.append(t)
+    story.append(Spacer(1, 24))
+
+    story.append(Paragraph("Share Balance Summary", styles["MyH1"]))
+    share_data = [
+        ["Description", "Details"],
+        ["Total Shares Held", "25 Shares"],
+        ["Face Value per Share", "BDT 1,000"],
+        ["Total Share Capital", "BDT 25,000"],
+        ["Additional Paid-in Capital", "BDT 5,000"],
+        ["Total Investment", "BDT 30,000"],
+    ]
+    t2 = Table(share_data, colWidths=[180, 280])
+    t2.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("GRID", (0, 0), (-1, -1), 0.5, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, 1), [white, LIGHT_GRAY]),
+        ("BACKGROUND", (0, 4), (-1, 4), HexColor("#e8f4fd")),
+        ("FONTNAME", (0, 4), (-1, 4), "Helvetica-Bold"),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+    ]))
+    story.append(t2)
+    story.append(Spacer(1, 24))
+
+    story.append(Paragraph("Dividend History", styles["MyH1"]))
+    div_data = [
+        ["Financial Year", "Dividend Rate", "Dividend Earned", "Status"],
+        ["2024 (FY 2023-24)", "10%", "BDT 2,500", "Paid"],
+        ["2025 (FY 2024-25)", "12%", "BDT 3,000", "Paid"],
+        ["2026 (FY 2025-26)", "Proposed 12%", "BDT 3,600", "Pending (AGM Approval)"],
+    ]
+    t3 = Table(div_data, colWidths=[120, 100, 110, 130])
+    t3.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("ALIGN", (1, 0), (-1, -1), "CENTER"),
+        ("GRID", (0, 0), (-1, -1), 0.5, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("BACKGROUND", (0, 3), (-1, 3), HexColor("#fff3cd")),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+    ]))
+    story.append(t3)
+    story.append(Spacer(1, 24))
+
+    story.append(Paragraph("Transaction History (Last 6 Months)", styles["MyH1"]))
+    tx_data = [
+        ["Date", "Description", "Amount (BDT)", "Type"],
+        ["Feb 15, 2026", "Dividend Payment FY 2024-25", "3,000", "Credit"],
+        ["Mar 10, 2026", "Share Purchase (5 Shares)", "5,000", "Credit"],
+        ["May 5, 2026", "Dividend Reinvestment", "1,200", "Credit"],
+        ["Jul 1, 2026", "Share Transfer Fee", "(100)", "Debit"],
+    ]
+    t4 = Table(tx_data, colWidths=[100, 200, 100, 60])
+    t4.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), BRAND_DARK),
+        ("TEXTCOLOR", (0, 0), (-1, 0), white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("ALIGN", (2, 0), (3, -1), "RIGHT"),
+        ("GRID", (0, 0), (-1, -1), 0.5, HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [white, LIGHT_GRAY]),
+        ("TOPPADDING", (0, 0), (-1, -1), 7),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+    ]))
+    story.append(t4)
+    story.append(Spacer(1, 20))
+
+    story.append(add_divider())
+    story.append(Spacer(1, 10))
+    story.append(Paragraph(
+        "<b>Next Steps:</b> If you have any questions regarding your share balance or dividend "
+        "entitlements, please contact the co-operative office or send an email to "
+        "accounts@nextmillionaireqr.com. The AGM for approving FY 2025-26 dividends is "
+        "scheduled for August 15, 2026.",
+        styles["MyBody"]))
+    story.append(Spacer(1, 30))
+    story.append(Paragraph(
+        "This is a computer-generated statement and does not require a signature.",
+        ParagraphStyle("Disclaimer", fontSize=9, leading=13, fontName="Helvetica-Oblique",
+                       textColor=HexColor("#888888"), alignment=TA_CENTER, spaceAfter=20)))
+
+    doc.build(story, onFirstPage=header_footer, onLaterPages=header_footer)
+    print(f"  Created: {os.path.basename(path)}")
+
+
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
     print("Generating portal PDFs...")
@@ -729,4 +864,5 @@ if __name__ == "__main__":
     generate_member_guide()
     generate_events_calendar()
     generate_tshirt_sizes()
+    generate_share_balance()
     print("Done! All PDFs saved in docs/")
